@@ -9,6 +9,7 @@ const DICT = decode(dict);
  * @param	{[string]|[Object]}	 data         数据
  * @param	{?string|[string]}   indexs       如果 data 为 [Object]，这里需要建立拼音索引 key
  * @param   {?boolean|[boolean]}  begin       如果 begin 为 true，从开始字符匹配
+ * @param   {?boolean|[boolean]}  startWithFirstWord    匹配关键字中每一个字符的的第一个字符
  */
 class PinyinEngine extends Engine {
     constructor(data, indexs, begin,startWithFirstWord) {
