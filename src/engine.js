@@ -5,12 +5,13 @@
  * @param   {array}              dict         词典数据
  */
 class Engine {
-    constructor(data, indexs = [], dict = {}, prefix = '') {
+    constructor(data, indexs = [], dict = {}, prefix = '',startWithFirstWord= false) {
         this.indexs = [];
         this.history = { keyword: '', indexs: [], data: [] };
         this.data = data;
         this.dict = dict;
         this.prefix = prefix;
+        this.startWithFirstWord = startWithFirstWord;
 
         // 建立拼音关键词索引
         indexs = typeof indexs === 'string' ? [indexs] : indexs;
@@ -18,12 +19,12 @@ class Engine {
             let keywords = '';
 
             if (typeof item === 'string') {
-                keywords = Engine.participle(item, dict, prefix);
+                keywords = Engine.participle(item, dict, prefix,startWithFirstWord);
             } else {
                 for (const key of indexs) {
                     const words = item[key];
                     if (words) {
-                        keywords += Engine.participle(words, dict, prefix);
+                        keywords += Engine.participle(words, dict, prefix,startWithFirstWord);
                     }
                 }
             }
@@ -72,11 +73,21 @@ class Engine {
      * @param   {Object}          dict         字典
      * @return	{string}
      */
-    static participle(words, dict, prefix='') {
+    static participle(words, dict, prefix='',startWithFirstWord) {
         words = words.replace(/\s/g, '');
         let result = `${prefix}${words}`;
         const keywords = [[], []];
-
+   
+        if(startWithFirstWord){
+            const char = words[0];
+             const pinyin = dict[char];
+            if (pinyin) {
+                keywords[0].push(pinyin);
+                if (words.length > 1) {
+                    keywords[1].push(pinyin.map(p => p.charAt(0)));
+                }
+            }
+        } else {
         for (const char of words) {
             const pinyin = dict[char];
             if (pinyin) {
@@ -85,6 +96,7 @@ class Engine {
                     keywords[1].push(pinyin.map(p => p.charAt(0)));
                 }
             }
+        }
         }
 
         for (const list of keywords) {

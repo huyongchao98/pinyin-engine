@@ -11,8 +11,8 @@ const DICT = decode(dict);
  * @param   {?boolean|[boolean]}  begin       如果 begin 为 true，从开始字符匹配
  */
 class PinyinEngine extends Engine {
-    constructor(data, indexs, begin) {
-        super(data, indexs, DICT, (begin && '$'));
+    constructor(data, indexs, begin,startWithFirstWord) {
+        super(data, indexs, DICT, (begin && '$'),startWithFirstWord);
     }
 
     /**
